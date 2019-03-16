@@ -21,11 +21,6 @@ class App extends Component {
     // const primaryAction = { content: 'New product' }
     // const secondaryActions = [{ content: 'Import', icon: 'import' }]
 
-    const choiceListItems = [
-      { label: 'I accept the Terms of Service', value: 'false' },
-      { label: 'I consent to receiving emails', value: 'false2' },
-    ]
-
     return (
       <Page
         title="Create Mystery Box"
