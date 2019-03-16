@@ -3,7 +3,8 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
-.margins {
+
+.marginTopBut {
   /* height: 0; */
   margin-bottom: 10px;
   margin-top: 10px;

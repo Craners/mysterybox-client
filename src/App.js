@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Layout, Page, Card } from '@shopify/polaris'
-import MultiAutocomplete from './MultiAutocomplete'
+import { Layout, Page, Card, Heading } from '@shopify/polaris'
+import MultiAutocompleteComp from './MultiAutocompleteComp'
+import ActionListComp from './ActionListComp'
+import './App.css'
 
 class App extends Component {
   constructor(props) {
@@ -35,7 +37,9 @@ class App extends Component {
           <Layout.Section>
             <Card title="Online store dashboard" sectioned>
               <p>View a summary of your online store’s performance.</p>
-              <MultiAutocomplete />
+              <MultiAutocompleteComp />
+              <ActionListComp />
+              <Heading>Found XX results</Heading>
             </Card>
           </Layout.Section>
         </Layout>

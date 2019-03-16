@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Autocomplete, TextContainer, Stack, Tag } from '@shopify/polaris'
+import './MultiAutocomplete.css';
 
-class MultiAutocomplete extends Component {
+class MultiAutocompleteComp extends Component {
   options = [
     { value: 'rustic', label: 'Rustic' },
     { value: 'antique', label: 'Antique' },
@@ -9,6 +10,7 @@ class MultiAutocomplete extends Component {
     { value: 'vintage', label: 'Vintage' },
     { value: 'refurbished', label: 'Refurbished' },
   ]
+  icons = [{ content: 'Import', icon: 'import' }]
 
   state = {
     selected: [],
@@ -25,7 +27,8 @@ class MultiAutocomplete extends Component {
       />
     )
     return (
-      <div style={{ height: '325px' }}>
+      // <div style={{ height: '150px' }}>
+      <div className="marginTopBut">
         <br />
         <Autocomplete
           allowMultiple
@@ -87,7 +90,7 @@ class MultiAutocomplete extends Component {
   }
   updateSelection = (selected) => this.setState({ selected })
 }
-export default MultiAutocomplete
+export default MultiAutocompleteComp
 
 function titleCase(string) {
   string = string
