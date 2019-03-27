@@ -1,5 +1,13 @@
 import React, { Component } from 'react'
-import { TextStyle, Avatar, FilterType, Card, ResourceList } from '@shopify/polaris'
+import {
+  TextStyle,
+  Avatar,
+  FilterType,
+  Card,
+  ResourceList,
+  Scrollable,
+  Spinner,
+} from '@shopify/polaris'
 import './ResourceListItem.css'
 
 export default class ResourceListItem extends Component {
@@ -13,6 +21,33 @@ export default class ResourceListItem extends Component {
         value: 'Account enabled',
       },
     ],
+    allMemeImgs: [],
+    spin: null,
+  }
+
+  componentDidMount() {
+    fetch('https://be.serveo.net/product/?shop=golden-crane.myshopify.com')
+      .then((response) => response.json())
+      .then((response) => {
+        const { products } = response
+        // console.log(products[0])
+        var x = this.mapping(products)
+        if (x.length > 0) {
+          this.setState({ allMemeImgs: x, spin: true })
+        } else {
+          this.setState({ allMemeImgs: [], spin: false })
+        }
+      })
+  }
+  mapping = (products) => {
+    var x = products.map((item) => {
+      return {
+        name: item.title,
+        id: item.id,
+        location: item.body_html,
+      }
+    })
+    return x
   }
   handleSearchChange = (searchValue) => {
     this.setState({ searchValue })
@@ -50,39 +85,9 @@ export default class ResourceListItem extends Component {
   }
   render() {
     const resourceName = {
-      singular: 'customer',
-      plural: 'customers',
+      singular: 'product',
+      plural: 'products',
     }
-    const items = [
-      {
-        id: 341,
-        url: 'customers/341',
-        name: 'Mae Jemison',
-        location: 'Decatur, USA',
-        latestOrderUrl: 'orders/1456',
-      },
-      {
-        id: 256,
-        url: 'customers/256',
-        name: 'Ellen Ochoa',
-        location: 'Los Angeles, USA',
-        latestOrderUrl: 'orders/1457',
-      },
-      {
-        id: 257,
-        url: 'customers/256',
-        name: 'Ellen Ochoa',
-        location: 'Los Angeles, USA',
-        latestOrderUrl: 'orders/1457',
-      },
-      {
-        id: 258,
-        url: 'customers/258',
-        name: 'Ellen Ochoa',
-        location: 'Los Angeles, USA',
-        latestOrderUrl: 'orders/1457',
-      },
-    ]
     const promotedBulkActions = [
       {
         content: 'Edit customers',
@@ -133,27 +138,33 @@ export default class ResourceListItem extends Component {
     )
     return (
       <div className="marginsClass">
-        <Card>
-          <ResourceList
-            resourceName={resourceName}
-            items={items}
-            renderItem={this.renderItem}
-            selectedItems={this.state.selectedItems}
-            onSelectionChange={this.handleSelectionChange}
-            promotedBulkActions={promotedBulkActions}
-            bulkActions={bulkActions}
-            sortValue={this.state.sortValue}
-            sortOptions={[
-              { label: 'Newest update', value: 'DATE_MODIFIED_DESC' },
-              { label: 'Oldest update', value: 'DATE_MODIFIED_ASC' },
-            ]}
-            onSortChange={(selected) => {
-              this.setState({ sortValue: selected })
-              console.log(`Sort option changed to ${selected}.`)
-            }}
-            filterControl={filterControl}
-          />
-        </Card>
+        {this.state.spin ? (
+          <Card>
+            <Scrollable shadow style={{ height: '450px' }}>
+              <ResourceList
+                resourceName={resourceName}
+                items={this.state.allMemeImgs}
+                renderItem={this.renderItem}
+                selectedItems={this.state.selectedItems}
+                onSelectionChange={this.handleSelectionChange}
+                promotedBulkActions={promotedBulkActions}
+                bulkActions={bulkActions}
+                sortValue={this.state.sortValue}
+                sortOptions={[
+                  { label: 'Newest update', value: 'DATE_MODIFIED_DESC' },
+                  { label: 'Oldest update', value: 'DATE_MODIFIED_ASC' },
+                ]}
+                onSortChange={(selected) => {
+                  this.setState({ sortValue: selected })
+                  console.log(`Sort option changed to ${selected}.`)
+                }}
+                filterControl={filterControl}
+              />
+            </Scrollable>
+          </Card>
+        ) : (
+          <Spinner size="large" color="teal" />
+        )}
       </div>
     )
   }
