@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Layout, Page, Card, Heading } from '@shopify/polaris'
-import MultiAutocompleteComp from './MultiAutocompleteComp'
-import ActionListComp from './ActionListComp'
+import { Layout, Page, Card } from '@shopify/polaris'
 import './App.css'
+import ResourceListItem from './ResourceListItem'
 
 class App extends Component {
   constructor(props) {
@@ -25,16 +24,12 @@ class App extends Component {
       <Page
         title="Create Mystery Box"
         breadcrumbs={breadcrumbs}
-        // primaryAction={primaryAction}
-        // secondaryActions={secondaryActions}
       >
         <Layout>
           <Layout.Section>
             <Card title="Online store dashboard" sectioned>
               <p>View a summary of your online store’s performance.</p>
-              <MultiAutocompleteComp />
-              <ActionListComp />
-              <Heading>Found XX results</Heading>
+              <ResourceListItem />
             </Card>
           </Layout.Section>
         </Layout>
