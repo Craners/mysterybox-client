@@ -12,7 +12,13 @@ class App extends Component {
       email: '',
       checkboxes: [],
       connected: false,
+      products: [],
     }
+  }
+
+  handleProductsAddded = (products) => {
+    console.log(products)
+    this.setState({ products: products })
   }
 
   render() {
@@ -21,15 +27,12 @@ class App extends Component {
     // const secondaryActions = [{ content: 'Import', icon: 'import' }]
 
     return (
-      <Page
-        title="Create Mystery Box"
-        breadcrumbs={breadcrumbs}
-      >
+      <Page title="Create Mystery Box" breadcrumbs={breadcrumbs}>
         <Layout>
           <Layout.Section>
             <Card title="Online store dashboard" sectioned>
               <p>View a summary of your online store’s performance.</p>
-              <ResourceListItem />
+              <ResourceListItem OnProductsAdded={this.handleProductsAddded} />
             </Card>
           </Layout.Section>
         </Layout>
