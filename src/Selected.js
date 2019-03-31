@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Layout, ResourceList, Avatar, TextStyle } from '@shopify/polaris'
+import { TextField, Layout, ResourceList, Avatar, TextStyle, Button } from '@shopify/polaris'
 import './ResourceListItem.css'
 
 export default class Selected extends Component {
@@ -73,6 +73,9 @@ export default class Selected extends Component {
               )
             }}
           />
+        </Layout.Section>
+        <Layout.Section>
+          <Button fullWidth primary>Generate</Button>
         </Layout.Section>
       </Layout>
     )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Page, Card } from '@shopify/polaris'
+import { Layout, Page, Card, FooterHelp, Link } from '@shopify/polaris'
 import './App.css'
 import ResourceListItem from './ResourceListItem'
 import Selected from './Selected'
@@ -34,6 +34,15 @@ class App extends Component {
             <Card sectioned>
               <Selected />
             </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <FooterHelp>
+              Learn more about MysteryBox{' '}
+              <Link url="https://help.shopify.com/manual/orders/fulfill-orders">
+                fulfilling orders
+              </Link>
+              .
+            </FooterHelp>
           </Layout.Section>
         </Layout>
       </Page>
