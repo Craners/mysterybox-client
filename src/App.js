@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Layout, Page, Card } from '@shopify/polaris'
 import './App.css'
 import ResourceListItem from './ResourceListItem'
+import Selected from './Selected'
 
 class App extends Component {
   constructor(props) {
@@ -21,15 +22,17 @@ class App extends Component {
     // const secondaryActions = [{ content: 'Import', icon: 'import' }]
 
     return (
-      <Page
-        title="Create Mystery Box"
-        breadcrumbs={breadcrumbs}
-      >
+      <Page title="Create Mystery Box" breadcrumbs={breadcrumbs}>
         <Layout>
           <Layout.Section>
             <Card title="Online store dashboard" sectioned>
               <p>View a summary of your online store’s performance.</p>
               <ResourceListItem />
+            </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <Card sectioned>
+              <Selected />
             </Card>
           </Layout.Section>
         </Layout>
