@@ -1,13 +1,5 @@
 import React, { Component } from 'react'
-import {
-  TextStyle,
-  Avatar,
-  FilterType,
-  Card,
-  ResourceList,
-  Scrollable,
-  Spinner,
-} from '@shopify/polaris'
+import { TextStyle, Avatar, FilterType, ResourceList, Scrollable } from '@shopify/polaris'
 import './ResourceListItem.css'
 
 export default class ResourceListItem extends Component {
@@ -168,33 +160,30 @@ export default class ResourceListItem extends Component {
     )
     return (
       <div className="marginsClass">
-        {this.state.spin ? (
-          <Card>
-            <Scrollable shadow style={{ height: '450px' }}>
-              <ResourceList
-                resourceName={resourceName}
-                items={this.state.filteredProducts}
-                renderItem={this.renderItem}
-                selectedItems={this.state.selectedItems}
-                onSelectionChange={this.handleSelectionChange}
-                promotedBulkActions={promotedBulkActions}
-                // bulkActions={bulkActions}
-                // sortValue={this.state.sortValue}
-                // sortOptions={[
-                //   { label: 'Newest update', value: 'DATE_MODIFIED_DESC' },
-                //   { label: 'Oldest update', value: 'DATE_MODIFIED_ASC' },
-                // ]}
-                // onSortChange={(selected) => {
-                //   this.setState({ sortValue: selected })
-                //   console.log(`Sort option changed to ${selected}.`)
-                // }}
-                filterControl={filterControl}
-              />
-            </Scrollable>
-          </Card>
-        ) : (
-          <Spinner size="large" color="teal" />
-        )}
+        {
+          <Scrollable shadow style={{ height: '450px' }}>
+            <ResourceList
+              resourceName={resourceName}
+              items={this.state.filteredProducts}
+              renderItem={this.renderItem}
+              selectedItems={this.state.selectedItems}
+              onSelectionChange={this.handleSelectionChange}
+              promotedBulkActions={promotedBulkActions}
+              // bulkActions={bulkActions}
+              // sortValue={this.state.sortValue}
+              // sortOptions={[
+              //   { label: 'Newest update', value: 'DATE_MODIFIED_DESC' },
+              //   { label: 'Oldest update', value: 'DATE_MODIFIED_ASC' },
+              // ]}
+              // onSortChange={(selected) => {
+              //   this.setState({ sortValue: selected })
+              //   console.log(`Sort option changed to ${selected}.`)
+              // }}
+              filterControl={filterControl}
+              loading={!this.state.spin}
+            />
+          </Scrollable>
+        }
       </div>
     )
   }
