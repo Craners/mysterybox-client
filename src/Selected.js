@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Layout, ResourceList, Avatar, TextStyle, Button } from '@shopify/polaris'
+import { TextField, Layout, Avatar, Button, DataTable } from '@shopify/polaris'
 import './ResourceListItem.css'
 
 export default class Selected extends Component {
@@ -10,7 +10,10 @@ export default class Selected extends Component {
   handleChange = (value, id) => {
     this.setState({ [id]: value })
   }
+
   render() {
+    let onAction = this.props.OnProductsAdded
+    console.log(onAction)
     return (
       <Layout>
         <Layout.Section oneThird>
@@ -32,52 +35,38 @@ export default class Selected extends Component {
           />
         </Layout.Section>
         <Layout.Section>
-          <ResourceList
-            resourceName={{ singular: 'customer', plural: 'customers' }}
-            items={[
-              {
-                id: 341,
-                url: 'customers/341',
-                name: 'Mae Jemison',
-                location: 'Decatur, USA',
-                latestOrderUrl: 'orders/1456',
-              },
-              {
-                id: 256,
-                url: 'customers/256',
-                name: 'Ellen Ochoa',
-                location: 'Los Angeles, USA',
-                latestOrderUrl: 'orders/1457',
-              },
-            ]}
-            renderItem={(item) => {
-              const { id, url, name, location, latestOrderUrl } = item
-              const media = <Avatar customer size="medium" name={name} />
-              const shortcutActions = latestOrderUrl
-                ? [{ content: 'View latest order', url: latestOrderUrl }]
-                : null
-
-              return (
-                <ResourceList.Item
-                  id={id}
-                  url={url}
-                  media={media}
-                  accessibilityLabel={`View details for ${name}`}
-                  shortcutActions={shortcutActions}
-                >
-                  <h3>
-                    <TextStyle variation="strong">{name}</TextStyle>
-                  </h3>
-                  <div>{location}</div>
-                </ResourceList.Item>
-              )
-            }}
-          />
+          <DataTables data={onAction} />
         </Layout.Section>
         <Layout.Section>
-          <Button fullWidth primary>Generate</Button>
+          <Button fullWidth primary>
+            Generate
+          </Button>
         </Layout.Section>
       </Layout>
     )
   }
+}
+
+function DataTables(props) {
+  const rows = []
+  let totalPrice = 0
+  let totalquantity = 0
+
+  props.data.forEach((item) => {
+    const { name, price, id } = item
+    const quantity = 1
+    totalquantity = Number(totalquantity) + 1
+    totalPrice = Number(totalPrice) + Number(price)
+    rows.push(Object.values({ name, id, quantity, price }))
+  })
+  console.log(rows)
+
+  return (
+    <DataTable
+      columnContentTypes={['text', 'numeric', 'numeric', 'numeric']}
+      headings={['Product', 'SKU Number', 'Quantity', 'Price']}
+      rows={rows}
+      totals={['', '', totalquantity, totalPrice]}
+    />
+  )
 }
