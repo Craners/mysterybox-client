@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { TextStyle, Avatar, FilterType, ResourceList, Scrollable } from '@shopify/polaris'
 import './ResourceListItem.css'
+require('dotenv').config();
 
 export default class ResourceListItem extends Component {
   state = {
@@ -18,8 +19,8 @@ export default class ResourceListItem extends Component {
     spin: null,
   }
 
-  componentDidMount() {
-    fetch('http://localhost:3000/product/?shop=golden-crane.myshopify.com')
+  componentDidMount() {  
+    fetch(`${process.env.REACT_APP_API_URL}/product/?shop=golden-crane.myshopify.com`)
       .then((response) => response.json())
       .then((response) => {
         const { products } = response
@@ -116,46 +117,11 @@ export default class ResourceListItem extends Component {
         onAction: () => this.props.OnProductsAdded(this.handleSelectedItemsForParent()),
       },
     ]
-    // const bulkActions = [
-    //   {
-    //     content: 'Add tags',
-    //     onAction: () => console.log('Todo: implement bulk add tags'),
-    //   },
-    //   {
-    //     content: 'Remove tags',
-    //     onAction: () => console.log('Todo: implement bulk remove tags'),
-    //   },
-    //   {
-    //     content: 'Delete customers',
-    //     onAction: () => console.log('Todo: implement bulk delete'),
-    //   },
-    // ]
-    // const filters = [
-    //   {
-    //     key: 'orderCountFilter',
-    //     label: 'Number of orders',
-    //     operatorText: 'is greater than',
-    //     type: FilterType.TextField,
-    //   },
-    //   {
-    //     key: 'accountStatusFilter',
-    //     label: 'Account status',
-    //     operatorText: 'is',
-    //     type: FilterType.Select,
-    //     options: ['Enabled', 'Invited', 'Not invited', 'Declined'],
-    //   },
-    // ]
     const filterControl = (
       <ResourceList.FilterControl
-        // filters={filters}
-        // appliedFilters={this.state.appliedFilters}
         onFiltersChange={this.handleFiltersChange}
         searchValue={this.state.searchValue}
         onSearchChange={this.handleSearchChange}
-        // additionalAction={{
-        //   content: 'Search',
-        //   onAction: () => console.log(this.state.searchValue),
-        // }}
       />
     )
     return (
@@ -169,16 +135,6 @@ export default class ResourceListItem extends Component {
               selectedItems={this.state.selectedItems}
               onSelectionChange={this.handleSelectionChange}
               promotedBulkActions={promotedBulkActions}
-              // bulkActions={bulkActions}
-              // sortValue={this.state.sortValue}
-              // sortOptions={[
-              //   { label: 'Newest update', value: 'DATE_MODIFIED_DESC' },
-              //   { label: 'Oldest update', value: 'DATE_MODIFIED_ASC' },
-              // ]}
-              // onSortChange={(selected) => {
-              //   this.setState({ sortValue: selected })
-              //   console.log(`Sort option changed to ${selected}.`)
-              // }}
               filterControl={filterControl}
               loading={!this.state.spin}
             />
