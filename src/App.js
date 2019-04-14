@@ -3,6 +3,7 @@ import { Layout, Page, Card, FooterHelp, Link } from '@shopify/polaris'
 import './App.css'
 import ResourceListItem from './ResourceListItem'
 import Selected from './Selected'
+require('dotenv').config();
 
 class App extends Component {
   constructor(props) {
@@ -18,7 +19,6 @@ class App extends Component {
   }
 
   handleProductsAddded = (products) => {
-    console.log(products)
     this.setState({ products: products })
   }
 
