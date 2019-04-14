@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
-import { TextStyle, Avatar, FilterType, ResourceList, Scrollable } from '@shopify/polaris'
+import {
+  TextStyle,
+  Avatar,
+  FilterType,
+  ResourceList,
+  Scrollable,
+  TextField,
+  Caption,
+} from '@shopify/polaris'
 import './ResourceListItem.css'
-require('dotenv').config();
+require('dotenv').config()
 
 export default class ResourceListItem extends Component {
   state = {
@@ -19,8 +27,9 @@ export default class ResourceListItem extends Component {
     spin: null,
   }
 
-  componentDidMount() {  
-    fetch(`${process.env.REACT_APP_API_URL}/product/?shop=golden-crane.myshopify.com`)
+  componentDidMount() {
+    let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
+    fetch(`${api_url}/product/?shop=golden-crane.myshopify.com`)
       .then((response) => response.json())
       .then((response) => {
         const { products } = response
@@ -41,6 +50,7 @@ export default class ResourceListItem extends Component {
         description: item.body_html,
         avatar: item.image != null ? item.image.src : null,
         price: item.variants != null ? item.variants[0].price : null,
+        quantity: 1
         // price: item.variants != null && item.variants[0].presentment_prices != null ? item.variants[0].presentment_prices[0].price.amount : null,
         // currency: item.variants != null && item.variants[0].presentment_prices != null ? item.variants[0].presentment_prices[0].price.currency_code : null
       }
@@ -83,12 +93,25 @@ export default class ResourceListItem extends Component {
       return this.state.selectedItems.indexOf(product.id) !== -1
     })
   }
+
   renderItem = (item) => {
-    const { id, url, name, description, latestOrderUrl, avatar } = item
+    const { id, name, description, avatar, price } = item
     const media = <Avatar customer size="medium" name={name} source={avatar} />
-    const shortcutActions = latestOrderUrl
-      ? [{ content: 'View latest order', url: latestOrderUrl }]
-      : null
+    const shortcutActions = [
+      // {
+      //   content: (
+      //     <TextField
+      //       // id="quantitytxt"
+      //       type="number"
+      //       placeholder="Quantity"
+      //       onChange={this.handleChange}
+      //       value={this.state.quantitytxt}
+      //       min='0'
+      //     />
+      //   ),
+      // },
+      { content: <Caption>{price}</Caption> },
+    ]
     return (
       <ResourceList.Item
         id={id}
