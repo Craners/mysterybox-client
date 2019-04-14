@@ -38,7 +38,7 @@ class App extends Component {
           </Layout.Section>
           <Layout.Section>
             <Card sectioned>
-              <Selected />
+              <Selected OnProductsAdded={this.state.products}/>
             </Card>
           </Layout.Section>
           <Layout.Section>

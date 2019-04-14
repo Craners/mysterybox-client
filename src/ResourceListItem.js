@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextStyle, Avatar, FilterType, ResourceList, Scrollable } from '@shopify/polaris'
+import { TextStyle, Avatar, ResourceList, Scrollable } from '@shopify/polaris'
 import './ResourceListItem.css'
 require('dotenv').config();
 
@@ -84,7 +84,7 @@ export default class ResourceListItem extends Component {
     })
   }
   renderItem = (item) => {
-    const { id, url, name, description, latestOrderUrl, avatar } = item
+    const { id, name, description, latestOrderUrl, avatar } = item
     const media = <Avatar customer size="medium" name={name} source={avatar} />
     const shortcutActions = latestOrderUrl
       ? [{ content: 'View latest order', url: latestOrderUrl }]
