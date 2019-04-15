@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Layout, Avatar, Button, DataTable } from '@shopify/polaris'
+import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
 import './ResourceListItem.css'
 
 export default class Selected extends Component {
