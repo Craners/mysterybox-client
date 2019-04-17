@@ -22,11 +22,11 @@ class App extends Component {
   handleProductsAddded = (newProds) => {
     this.setState((state) => {
       let newProducts = []
-      let prevElementsNotInProducts = state.products.filter((product) => {
+      let prevElementsNotInCurrentProducts = state.products.filter((product) => {
         return !_.find(newProds, { id: product.id })
       })
 
-      newProds.push(...prevElementsNotInProducts)
+      newProducts.push(...prevElementsNotInCurrentProducts)
 
       newProds.forEach((product) => {
         if (!_.find(state.products, { id: product.id })) {
@@ -37,6 +37,7 @@ class App extends Component {
           newProducts.push(tempProd)
         }
       })
+
       let products = newProducts
       return { products }
     })
@@ -58,7 +59,7 @@ class App extends Component {
           </Layout.Section>
           <Layout.Section>
             <Card sectioned>
-              <Selected OnProductsAdded={this.state.products}/>
+              <Selected OnProductsAdded={this.state.products} />
             </Card>
           </Layout.Section>
           <Layout.Section>

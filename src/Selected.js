@@ -53,13 +53,13 @@ function DataTables(props) {
   let totalquantity = 0
 
   props.data.forEach((item) => {
-    const { name, price, id } = item
-    const quantity = 1
-    totalquantity = Number(totalquantity) + 1
+    const { name, price, id, quantity } = item
+    // const quantity = quantity
+    totalquantity = Number(totalquantity) + quantity
     totalPrice = Number(totalPrice) + Number(price)
     rows.push(Object.values({ name, id, quantity, price }))
   })
-  console.log(rows)
+  // console.log(rows)
 
   return (
     <DataTable
