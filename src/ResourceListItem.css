@@ -7,3 +7,7 @@
 .scroll {
   height: 100%;
 }
+
+.Polaris-Button__Text {
+  color: black;
+}

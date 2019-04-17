@@ -3,7 +3,8 @@ import { Layout, Page, Card, FooterHelp, Link } from '@shopify/polaris'
 import './App.css'
 import ResourceListItem from './ResourceListItem'
 import Selected from './Selected'
-require('dotenv').config();
+require('dotenv').config()
+let _ = require('lodash')
 
 class App extends Component {
   constructor(props) {
@@ -18,8 +19,28 @@ class App extends Component {
     }
   }
 
-  handleProductsAddded = (products) => {
-    this.setState({ products: products })
+  handleProductsAddded = (newProds) => {
+    this.setState((state) => {
+      let newProducts = []
+      let prevElementsNotInCurrentProducts = state.products.filter((product) => {
+        return !_.find(newProds, { id: product.id })
+      })
+
+      newProducts.push(...prevElementsNotInCurrentProducts)
+
+      newProds.forEach((product) => {
+        if (!_.find(state.products, { id: product.id })) {
+          newProducts.push(product)
+        } else {
+          let tempProd = product
+          tempProd.quantity += 1
+          newProducts.push(tempProd)
+        }
+      })
+
+      let products = newProducts
+      return { products }
+    })
   }
 
   render() {
@@ -38,7 +59,7 @@ class App extends Component {
           </Layout.Section>
           <Layout.Section>
             <Card sectioned>
-              <Selected OnProductsAdded={this.state.products}/>
+              <Selected OnProductsAdded={this.state.products} />
             </Card>
           </Layout.Section>
           <Layout.Section>
