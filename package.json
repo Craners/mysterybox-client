@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@shopify/polaris": "^3.10.0",
+    "currency-symbol-map": "^4.0.4",
     "dotenv": "^7.0.0",
     "lodash": "^4.17.11",
     "react": "^16.8.4",
