@@ -16,7 +16,27 @@ class App extends Component {
       checkboxes: [],
       connected: false,
       products: [],
+      shopInfo: {}
     }
+  }
+
+  getShopInfo = async (api_url, shopDomain) => {
+    try {
+      const response = await fetch(`${api_url}/shop/?shop=${shopDomain}`)
+      const json = await response.json()
+      const { shop } = json
+      return shop
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async componentDidMount() {
+    let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
+    const shop = 'golden-crane.myshopify.com';
+
+    const shopInfo = await this.getShopInfo(api_url, shop)
+    this.setState({ shopInfo: shopInfo })
   }
 
   handleProductsAddded = (newProds) => {
@@ -52,14 +72,14 @@ class App extends Component {
       <Page title="Create Mystery Box" breadcrumbs={breadcrumbs}>
         <Layout>
           <Layout.Section>
-            <Card title="Online store dashboard" sectioned>
-              <p>View a summary of your online store’s performance.</p>
-              <ResourceListItem OnProductsAdded={this.handleProductsAddded} />
+            <Card title="Mystery Box dashboard" sectioned>
+              <p>Create your mystery box here.</p>
+              <ResourceListItem OnProductsAdded={this.handleProductsAddded} shopInfo={this.state.shopInfo} />
             </Card>
           </Layout.Section>
           <Layout.Section>
             <Card sectioned>
-              <Selected OnProductsAdded={this.state.products} />
+              <Selected OnProductsAdded={this.state.products} shopInfo={this.state.shopInfo} />
             </Card>
           </Layout.Section>
           <Layout.Section>

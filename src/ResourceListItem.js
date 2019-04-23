@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import {
   TextStyle,
   Avatar,
-  FilterType,
   ResourceList,
   Scrollable,
-  TextField,
   Caption,
 } from '@shopify/polaris'
 import './ResourceListItem.css'
+import getSymbolFromCurrency from 'currency-symbol-map'
 require('dotenv').config()
+let _ = require('lodash')
 
 export default class ResourceListItem extends Component {
   state = {
@@ -22,18 +22,18 @@ export default class ResourceListItem extends Component {
         value: 'Account enabled',
       },
     ],
+    shopInfo: {},
     allProducts: [],
     filteredProducts: [],
     spin: null,
   }
 
-  componentDidMount() {
-    let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
-    fetch(`${api_url}/product/?shop=golden-crane.myshopify.com`)
+  getProducts = async (api_url, shop) => {
+    await fetch(`${api_url}/product/?shop=${shop}`) //dynamic shop name
       .then((response) => response.json())
       .then((response) => {
         const { products } = response
-        var x = this.mapping(products)
+        var x = this.mapProducts(products)
         if (x.length > 0) {
           this.setState({ allProducts: x, spin: true })
         } else {
@@ -41,8 +41,26 @@ export default class ResourceListItem extends Component {
         }
         this.setState({ filteredProducts: this.state.allProducts })
       })
+      .catch(error => {
+        console.log(error);
+      })
   }
-  mapping = (products) => {
+
+  //TODO: Move this to App.js. Then pass the data to components as needed.
+  async componentDidMount() {
+    let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
+    const shop = 'golden-crane.myshopify.com';
+
+    await this.getProducts(api_url, shop)
+  }
+
+  componentDidUpdate() {
+    if (_.isEmpty(this.state.shopInfo)) {
+      this.setState({ shopInfo: this.props.shopInfo })
+    }
+  }
+
+  mapProducts = (products) => {
     var x = products.map((item) => {
       return {
         name: item.title,
@@ -51,12 +69,11 @@ export default class ResourceListItem extends Component {
         avatar: item.image != null ? item.image.src : null,
         price: item.variants != null ? item.variants[0].price : null,
         quantity: 1
-        // price: item.variants != null && item.variants[0].presentment_prices != null ? item.variants[0].presentment_prices[0].price.amount : null,
-        // currency: item.variants != null && item.variants[0].presentment_prices != null ? item.variants[0].presentment_prices[0].price.currency_code : null
       }
     })
     return x
   }
+
   handleSearchChange = (searchValue) => {
     var filteredProducts = this.state.allProducts.filter((product) => {
       return product.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1
@@ -110,7 +127,7 @@ export default class ResourceListItem extends Component {
       //     />
       //   ),
       // },
-      { content: <Caption>{price}</Caption> },
+      { content: <Caption>{getSymbolFromCurrency(this.state.shopInfo.currency)} {price}</Caption> },
     ]
     return (
       <ResourceList.Item
