@@ -6,7 +6,7 @@ let _ = require('lodash')
 
 export default class Selected extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       pricetxt: '200',
       titletxt: 'Boxi',
@@ -48,7 +48,10 @@ export default class Selected extends Component {
           />
         </Layout.Section>
         <Layout.Section>
-          <DataTables data={onAction} />
+          <DataTables
+            data={onAction}
+            prefix={getSymbolFromCurrency(this.state.shopInfo.currency)}
+          />
         </Layout.Section>
         <Layout.Section>
           <Button fullWidth primary>
@@ -66,20 +69,19 @@ function DataTables(props) {
   let totalquantity = 0
 
   props.data.forEach((item) => {
-    const { name, price, id, quantity } = item
-    // const quantity = quantity
+    let { name, price, id, quantity } = item
     totalquantity = Number(totalquantity) + quantity
     totalPrice = Number(totalPrice) + Number(price)
+    price = props.prefix + ' ' + price
     rows.push(Object.values({ name, id, quantity, price }))
   })
-  // console.log(rows)
-
+  totalPrice = props.prefix + ' ' + totalPrice
   return (
     <DataTable
       columnContentTypes={['text', 'numeric', 'numeric', 'numeric']}
       headings={['Product', 'SKU Number', 'Quantity', 'Price']}
       rows={rows}
-      totals={['', '', totalquantity, `${totalPrice}`]} //currency should be added here for total, but can't access 'state' here.
+      totals={['', '', totalquantity, `${totalPrice}`]} // currency should be added here for total, but can't access 'state' here.
     />
   )
 }
