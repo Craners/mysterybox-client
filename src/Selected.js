@@ -24,6 +24,54 @@ export default class Selected extends Component {
     this.setState({ [id]: value })
   }
 
+  buildBody = (products, title, total) => {
+    let productsArr = []
+    if (products.length > 0) {
+      products.forEach((item) => {
+        productsArr.push(item.id)
+      })
+    }
+
+    let body = {}
+    body = {
+      customCollection: {
+        title: title,
+        published: false,
+        image: {
+          src: 'https://placeimg.com/300/300/tech',
+          alt: 'https://placeimg.com/300/300/tech',
+        },
+      },
+      products: productsArr,
+      resultProduct: {
+        title: 'MysteryBox',
+        body_html: 'Default Description of MysteryBox',
+        image: 'https://placeimg.com/300/300/tech',
+        variants: [
+          {
+            option1: 'option1',
+            price: total,
+            sku: 'sku',
+          },
+        ],
+      },
+    }
+    return body
+  }
+
+  callApi(body) {
+    return 0
+  }
+
+  createBox = (props, title, total) => {
+    if (props.length > 0) {
+      let body = this.buildBsody(props, title, total)
+      this.callApi(body)
+    } else {
+      console.log('Add a Product to the list first')
+    }
+  }
+
   render() {
     let onAction = this.props.OnProductsAdded
 
@@ -54,7 +102,11 @@ export default class Selected extends Component {
           />
         </Layout.Section>
         <Layout.Section>
-          <Button fullWidth primary>
+          <Button
+            fullWidth
+            primary
+            onClick={() => this.createBox(onAction, this.state.titletxt, this.state.pricetxt)}
+          >
             Generate
           </Button>
         </Layout.Section>
