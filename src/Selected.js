@@ -6,6 +6,9 @@ let _ = require('lodash')
 const got = require('got')
 
 export default class Selected extends Component {
+  shop = ''
+  api_url = ''
+
   constructor(props) {
     super(props)
     this.state = {
@@ -19,6 +22,12 @@ export default class Selected extends Component {
     if (_.isEmpty(this.state.shopInfo)) {
       this.setState({ shopInfo: this.props.shopInfo })
     }
+  }
+
+  //TODO: Move this to App.js. Then pass the data to components as needed.
+  async componentDidMount() {
+    this.api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
+    this.shop = process.env.REACT_APP_SHOP
   }
 
   handleChange = (value, id) => {
@@ -70,7 +79,9 @@ export default class Selected extends Component {
       },
       json: true,
     }
-    return await got.post('http://localhost:3000/?shop=golden-crane.myshopify.com', options)
+    console.log(`${this.api_url}/?shop=${this.shop}`);
+    
+    return await got.post(`${this.api_url}/?shop=${this.shop}`, options)
   }
 
   async createBox(props, title, total) {

@@ -33,9 +33,9 @@ class App extends Component {
 
   async componentDidMount() {
     let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
-    const shop = 'golden-crane.myshopify.com';
+    this.shop = process.env.REACT_APP_SHOP
 
-    const shopInfo = await this.getShopInfo(api_url, shop)
+    const shopInfo = await this.getShopInfo(api_url, this.shop)
     this.setState({ shopInfo: shopInfo })
   }
 
