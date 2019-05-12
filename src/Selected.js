@@ -3,6 +3,7 @@ import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
 import './ResourceListItem.css'
 import getSymbolFromCurrency from 'currency-symbol-map'
 let _ = require('lodash')
+const got = require('got')
 
 export default class Selected extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class Selected extends Component {
     let productsArr = []
     if (products.length > 0) {
       products.forEach((item) => {
-        productsArr.push(item.id)
+        productsArr.push({ id: item.id })
       })
     }
 
@@ -59,14 +60,26 @@ export default class Selected extends Component {
     return body
   }
 
-  callApi(body) {
-    return 0
+  async callApi(body) {
+    // let jsonBody = JSON.stringify(body)
+    let options = {
+      method: 'POST',
+      body: body,
+      headers: {
+        'cache-control': 'no-cache',
+      },
+      json: true,
+    }
+    return await got.post('http://localhost:3000/?shop=golden-crane.myshopify.com', options)
   }
 
-  createBox = (props, title, total) => {
+  async createBox(props, title, total) {
     if (props.length > 0) {
-      let body = this.buildBsody(props, title, total)
-      this.callApi(body)
+      let body = this.buildBody(props, title, total)
+      let result = await this.callApi(body)
+      console.log(result)
+      console.log(result.statusCode)
+      console.log(result.body)
     } else {
       console.log('Add a Product to the list first')
     }
