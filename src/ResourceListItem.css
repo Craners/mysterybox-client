@@ -9,5 +9,9 @@
 }
 
 .Polaris-Button__Text {
+  color: white;
+}
+
+.Polaris-Caption{
   color: black;
 }

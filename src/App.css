@@ -8,3 +8,15 @@ body {
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
+.Polaris-Card__Section {
+  transform: translateZ(0);
+}
+
+.Polaris-ResourceList__HeaderWrapper {
+  top: 0px;
+}
+.Polaris-ResourceList__HeaderWrapper--isSticky {
+  top: -160px;
+  left: -375px;
+}
