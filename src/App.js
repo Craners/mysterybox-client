@@ -23,8 +23,8 @@ class App extends Component {
   getShopInfo = async (api_url, shopDomain) => {
     try {
       const response = await fetch(`${api_url}/shop/?shop=${shopDomain}`)
-      const json = await response.json()
-      const { shop } = json
+      const json = await response.json();      
+      const { shop } = json.body
       return shop
     } catch (error) {
       console.log(error)

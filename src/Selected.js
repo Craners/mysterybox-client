@@ -80,17 +80,17 @@ export default class Selected extends Component {
       json: true,
     }
     console.log(`${this.api_url}/?shop=${this.shop}`);
+
+    let res = await got.post(`${this.api_url}/?shop=${this.shop}`, options)
+    console.log(res);
     
-    return await got.post(`${this.api_url}/?shop=${this.shop}`, options)
+    return res;
   }
 
   async createBox(props, title, total) {
     if (props.length > 0) {
       let body = this.buildBody(props, title, total)
       let result = await this.callApi(body)
-      console.log(result)
-      console.log(result.statusCode)
-      console.log(result.body)
     } else {
       console.log('Add a Product to the list first')
     }
