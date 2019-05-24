@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
+import { TextField, Layout, Button, DataTable, Toast } from '@shopify/polaris'
 import './ResourceListItem.css'
 import getSymbolFromCurrency from 'currency-symbol-map'
 let _ = require('lodash')
@@ -15,6 +15,7 @@ export default class Selected extends Component {
       pricetxt: '200',
       titletxt: 'Boxi',
       shopInfo: {},
+      showToast: false
     }
   }
 
@@ -69,6 +70,7 @@ export default class Selected extends Component {
     return body
   }
 
+  //Here add to response 200
   async callApi(body) {
     // let jsonBody = JSON.stringify(body)
     let options = {
@@ -83,7 +85,7 @@ export default class Selected extends Component {
 
     let res = await got.post(`${this.api_url}/?shop=${this.shop}`, options)
     console.log(res);
-    
+
     return res;
   }
 
@@ -97,7 +99,17 @@ export default class Selected extends Component {
   }
 
   render() {
-    let onAction = this.props.OnProductsAdded
+    let onAction = this.props.OnProductsAdded;
+
+    const { showToast } = this.state;
+
+    const toastMarkup = showToast ? (
+      <Toast
+        content="Message sent"
+        onDismiss={this.toggleToast}
+        duration={4500}
+      />
+    ) : null;
 
     return (
       <Layout>
@@ -129,7 +141,7 @@ export default class Selected extends Component {
           <Button
             fullWidth
             primary
-            onClick={() => this.createBox(onAction, this.state.titletxt, this.state.pricetxt)}
+            onClick={() => { this.toggleToast(); this.createBox(onAction, this.state.titletxt, this.state.pricetxt); }}
           >
             Generate
           </Button>
@@ -137,7 +149,13 @@ export default class Selected extends Component {
       </Layout>
     )
   }
+
+  toggleToast = () => {
+    this.setState(({ showToast }) => ({ showToast: !showToast }));
+  };
 }
+
+
 
 function DataTables(props) {
   const rows = []
