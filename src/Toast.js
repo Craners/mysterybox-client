@@ -9,17 +9,14 @@ export default class ToastComponent extends Component {
     render() {
         const { showToast } = this.state;
         const toastMarkup = showToast ? (
-            <Toast content="Message sent" onDismiss={this.toggleToast} duration={4500} />
+            <Toast content={this.props.message} onDismiss={this.toggleToast} duration={4500} />
         ) : null;
 
 
         return (
             <div style={{ height: '0px' }}>
                 <Frame>
-                    {/* <Page title="Toast example"> */}
-                    {/* <Button onClick={this.toggleToast}>Show Toast</Button> */}
                     {toastMarkup}
-                    {/* </Page> */}
                 </Frame>
             </div>
         );

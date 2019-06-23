@@ -3,6 +3,7 @@ import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
 import './ResourceListItem.css'
 import getSymbolFromCurrency from 'currency-symbol-map'
 import ToastComponent from './Toast'
+import { string } from 'prop-types';
 let _ = require('lodash')
 const got = require('got')
 
@@ -16,7 +17,8 @@ export default class Selected extends Component {
       pricetxt: '200',
       titletxt: 'Boxi',
       shopInfo: {},
-      addToast: false
+      addToast: false,
+      messageToast: "",
     }
   }
 
@@ -93,6 +95,14 @@ export default class Selected extends Component {
     if (props.length > 0) {
       let body = this.buildBody(props, title, total)
       let result = await this.callApi(body)
+      let statusCode = result.body.statusCode;
+
+      if (statusCode === 201) {
+        this.setState({ messageToast: "Collection box created successfully." });
+      }
+      else {
+        this.setState({ messageToast: `Collection box creation failed. HttpStatus: ${statusCode}` });
+      }
       this.setState({ addToast: true });
     } else {
       console.log('Add a Product to the list first')
@@ -137,7 +147,7 @@ export default class Selected extends Component {
             Generate
           </Button>
         </Layout.Section>
-        {this.state.addToast ? <ToastComponent /> : null}
+        {this.state.addToast ? <ToastComponent message={this.state.messageToast} /> : null}
       </Layout>
     )
   }
