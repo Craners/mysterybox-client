@@ -32,7 +32,7 @@ export default class ResourceListItem extends Component {
     await fetch(`${api_url}/product/?shop=${shop}`) //dynamic shop name
       .then((response) => response.json())
       .then((response) => {
-        const { products } = response
+        const { products } = response.body
         var x = this.mapProducts(products)
         if (x.length > 0) {
           this.setState({ allProducts: x, spin: true })

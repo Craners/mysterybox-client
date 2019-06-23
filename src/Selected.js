@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
 import './ResourceListItem.css'
 import getSymbolFromCurrency from 'currency-symbol-map'
+import ToastComponent from './Toast'
+import { string } from 'prop-types';
 let _ = require('lodash')
 const got = require('got')
 
@@ -10,11 +12,13 @@ export default class Selected extends Component {
   api_url = ''
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       pricetxt: '200',
       titletxt: 'Boxi',
       shopInfo: {},
+      addToast: false,
+      messageToast: "",
     }
   }
 
@@ -24,7 +28,6 @@ export default class Selected extends Component {
     }
   }
 
-  //TODO: Move this to App.js. Then pass the data to components as needed.
   async componentDidMount() {
     this.api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
     this.shop = process.env.REACT_APP_SHOP
@@ -69,6 +72,7 @@ export default class Selected extends Component {
     return body
   }
 
+  //Here add to response 200
   async callApi(body) {
     // let jsonBody = JSON.stringify(body)
     let options = {
@@ -80,24 +84,33 @@ export default class Selected extends Component {
       json: true,
     }
     console.log(`${this.api_url}/?shop=${this.shop}`);
-    
-    return await got.post(`${this.api_url}/?shop=${this.shop}`, options)
+
+    let res = await got.post(`${this.api_url}/?shop=${this.shop}`, options)
+    console.log(res);
+
+    return res;
   }
 
   async createBox(props, title, total) {
     if (props.length > 0) {
       let body = this.buildBody(props, title, total)
       let result = await this.callApi(body)
-      console.log(result)
-      console.log(result.statusCode)
-      console.log(result.body)
+      let statusCode = result.body.statusCode;
+
+      if (statusCode === 201) {
+        this.setState({ messageToast: "Collection box created successfully." });
+      }
+      else {
+        this.setState({ messageToast: `Collection box creation failed. HttpStatus: ${statusCode}` });
+      }
+      this.setState({ addToast: true });
     } else {
       console.log('Add a Product to the list first')
     }
   }
 
   render() {
-    let onAction = this.props.OnProductsAdded
+    let onAction = this.props.OnProductsAdded;
 
     return (
       <Layout>
@@ -134,6 +147,7 @@ export default class Selected extends Component {
             Generate
           </Button>
         </Layout.Section>
+        {this.state.addToast ? <ToastComponent message={this.state.messageToast} /> : null}
       </Layout>
     )
   }
