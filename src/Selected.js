@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { TextField, Layout, Button, DataTable, Toast } from '@shopify/polaris'
+import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
 import './ResourceListItem.css'
 import getSymbolFromCurrency from 'currency-symbol-map'
+import ToastComponent from './Toast'
 let _ = require('lodash')
 const got = require('got')
 
@@ -10,12 +11,12 @@ export default class Selected extends Component {
   api_url = ''
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       pricetxt: '200',
       titletxt: 'Boxi',
       shopInfo: {},
-      showToast: false
+      addToast: false
     }
   }
 
@@ -25,7 +26,6 @@ export default class Selected extends Component {
     }
   }
 
-  //TODO: Move this to App.js. Then pass the data to components as needed.
   async componentDidMount() {
     this.api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
     this.shop = process.env.REACT_APP_SHOP
@@ -93,6 +93,7 @@ export default class Selected extends Component {
     if (props.length > 0) {
       let body = this.buildBody(props, title, total)
       let result = await this.callApi(body)
+      this.setState({ addToast: true });
     } else {
       console.log('Add a Product to the list first')
     }
@@ -100,16 +101,6 @@ export default class Selected extends Component {
 
   render() {
     let onAction = this.props.OnProductsAdded;
-
-    const { showToast } = this.state;
-
-    const toastMarkup = showToast ? (
-      <Toast
-        content="Message sent"
-        onDismiss={this.toggleToast}
-        duration={4500}
-      />
-    ) : null;
 
     return (
       <Layout>
@@ -141,21 +132,16 @@ export default class Selected extends Component {
           <Button
             fullWidth
             primary
-            onClick={() => { this.toggleToast(); this.createBox(onAction, this.state.titletxt, this.state.pricetxt); }}
+            onClick={() => this.createBox(onAction, this.state.titletxt, this.state.pricetxt)}
           >
             Generate
           </Button>
         </Layout.Section>
+        {this.state.addToast ? <ToastComponent /> : null}
       </Layout>
     )
   }
-
-  toggleToast = () => {
-    this.setState(({ showToast }) => ({ showToast: !showToast }));
-  };
 }
-
-
 
 function DataTables(props) {
   const rows = []
