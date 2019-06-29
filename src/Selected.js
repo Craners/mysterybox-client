@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Layout, Button, DataTable } from '@shopify/polaris'
+import { TextField, Layout, Button, DataTable, Spinner } from '@shopify/polaris'
 import './ResourceListItem.css'
 import getSymbolFromCurrency from 'currency-symbol-map'
 import ToastComponent from './Toast'
@@ -8,29 +8,37 @@ let _ = require('lodash')
 const got = require('got')
 
 export default class Selected extends Component {
-  shop = ''
-  api_url = ''
-
   constructor(props) {
     super(props);
     this.state = {
+      api_url: 'http://localhost:3000',
       pricetxt: '200',
       titletxt: 'Boxi',
       shopInfo: {},
-      addToast: false,
+      showToast: false,
       messageToast: "",
+      disabledGenerateBtn: false,
+      messageGenerateBtn: "Generate"
     }
   }
 
-  componentDidUpdate() {
-    if (_.isEmpty(this.state.shopInfo)) {
-      this.setState({ shopInfo: this.props.shopInfo })
+  getShopInfo = async (api_url, shopDomain) => {
+    try {
+      const response = await fetch(`${api_url}/shop/?shop=${shopDomain}`)
+      const json = await response.json();
+      const { shop } = json.body
+      return shop
+    } catch (error) {
+      console.log(error)
     }
   }
 
   async componentDidMount() {
-    this.api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
+    this.setState({ api_url: process.env.REACT_APP_API_URL });
     this.shop = process.env.REACT_APP_SHOP
+
+    const shopInfo = await this.getShopInfo(this.state.api_url, this.shop)
+    this.setState({ shopInfo: shopInfo })
   }
 
   handleChange = (value, id) => {
@@ -83,9 +91,9 @@ export default class Selected extends Component {
       },
       json: true,
     }
-    console.log(`${this.api_url}/?shop=${this.shop}`);
+    console.log(`${this.state.api_url}/?shop=${this.shop}`);
 
-    let res = await got.post(`${this.api_url}/?shop=${this.shop}`, options)
+    let res = await got.post(`${this.state.api_url}/?shop=${this.shop}`, options)
     console.log(res);
 
     return res;
@@ -93,19 +101,27 @@ export default class Selected extends Component {
 
   async createBox(props, title, total) {
     if (props.length > 0) {
+      this.setState({ showToast: false });
+      this.setState({ messageGenerateBtn: <Spinner color="teal" size="small" /> })
+      this.setState({ disabledGenerateBtn: true });
       let body = this.buildBody(props, title, total)
       let result = await this.callApi(body)
       let statusCode = result.body.statusCode;
+      let error = result.body.error;
+
+      this.setState({ disabledGenerateBtn: false });
+      this.setState({ messageGenerateBtn: "Generate" })
 
       if (statusCode === 201) {
         this.setState({ messageToast: "Collection box created successfully." });
       }
       else {
-        this.setState({ messageToast: `Collection box creation failed. HttpStatus: ${statusCode}` });
+        this.setState({ messageToast: `Collection box creation failed. Message: ${error}` });
       }
-      this.setState({ addToast: true });
+      this.setState({ showToast: true });
     } else {
-      console.log('Add a Product to the list first')
+      this.setState({ messageToast: "Add a Product to the list first" });
+      this.setState({ showToast: true })
     }
   }
 
@@ -143,11 +159,12 @@ export default class Selected extends Component {
             fullWidth
             primary
             onClick={() => this.createBox(onAction, this.state.titletxt, this.state.pricetxt)}
+            disabled={this.state.disabledGenerateBtn}
           >
-            Generate
+            {this.state.messageGenerateBtn}
           </Button>
         </Layout.Section>
-        {this.state.addToast ? <ToastComponent message={this.state.messageToast} /> : null}
+        {this.state.showToast ? <ToastComponent message={this.state.messageToast} /> : null}
       </Layout>
     )
   }
