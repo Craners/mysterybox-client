@@ -16,27 +16,7 @@ class App extends Component {
       checkboxes: [],
       connected: false,
       products: [],
-      shopInfo: {}
     }
-  }
-
-  getShopInfo = async (api_url, shopDomain) => {
-    try {
-      const response = await fetch(`${api_url}/shop/?shop=${shopDomain}`)
-      const json = await response.json();
-      const { shop } = json.body
-      return shop
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async componentDidMount() {
-    let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
-    this.shop = process.env.REACT_APP_SHOP
-
-    const shopInfo = await this.getShopInfo(api_url, this.shop)
-    this.setState({ shopInfo: shopInfo })
   }
 
   handleProductsAddded = (newProds) => {
@@ -74,12 +54,12 @@ class App extends Component {
           <Layout.Section>
             <Card title="Mystery Box dashboard" sectioned>
               <p>Create your mystery box here.</p>
-              <ResourceListItem OnProductsAdded={this.handleProductsAddded} shopInfo={this.state.shopInfo} />
+              <ResourceListItem OnProductsAdded={this.handleProductsAddded} />
             </Card>
           </Layout.Section>
           <Layout.Section>
             <Card sectioned>
-              <Selected OnProductsAdded={this.state.products} shopInfo={this.state.shopInfo} />
+              <Selected OnProductsAdded={this.state.products} />
             </Card>
           </Layout.Section>
           <Layout.Section>

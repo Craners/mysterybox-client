@@ -12,24 +12,27 @@ require('dotenv').config()
 let _ = require('lodash')
 
 export default class ResourceListItem extends Component {
-  state = {
-    selectedItems: [],
-    sortValue: 'DATE_MODIFIED_DESC',
-    searchValue: '',
-    appliedFilters: [
-      {
-        key: 'accountStatusFilter',
-        value: 'Account enabled',
-      },
-    ],
-    shopInfo: {},
-    allProducts: [],
-    filteredProducts: [],
-    spin: null,
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedItems: [],
+      sortValue: 'DATE_MODIFIED_DESC',
+      searchValue: '',
+      appliedFilters: [
+        {
+          key: 'accountStatusFilter',
+          value: 'Account enabled',
+        },
+      ],
+      shopInfo: {},
+      allProducts: [],
+      filteredProducts: [],
+      spin: null,
+    }
   }
 
   getProducts = async (api_url, shop) => {
-    await fetch(`${api_url}/product/?shop=${shop}`) //dynamic shop name
+    await fetch(`${api_url}/product/?shop=${shop}`)
       .then((response) => response.json())
       .then((response) => {
         const { products } = response.body
@@ -46,18 +49,25 @@ export default class ResourceListItem extends Component {
       })
   }
 
+  getShopInfo = async (api_url, shopDomain) => {
+    try {
+      const response = await fetch(`${api_url}/shop/?shop=${shopDomain}`)
+      const json = await response.json();
+      const { shop } = json.body
+      return shop
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   //TODO: Move this to App.js. Then pass the data to components as needed.
   async componentDidMount() {
     let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
     this.shop = process.env.REACT_APP_SHOP
 
     await this.getProducts(api_url, this.shop)
-  }
-
-  componentDidUpdate() {
-    if (_.isEmpty(this.state.shopInfo)) {
-      this.setState({ shopInfo: this.props.shopInfo })
-    }
+    const shopInfo = await this.getShopInfo(api_url, this.shop)
+    this.setState({ shopInfo: shopInfo })
   }
 
   mapProducts = (products) => {
