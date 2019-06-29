@@ -178,7 +178,7 @@ function DataTables(props) {
   props.data.forEach((item) => {
     let { name, price, id, quantity } = item
     totalquantity = Number(totalquantity) + quantity
-    totalPrice = Number(totalPrice) + Number(price)
+    totalPrice = Number(totalPrice) + (Number(price) * quantity)
     price = props.prefix + ' ' + price
     rows.push(Object.values({ name, id, quantity, price }))
   })
