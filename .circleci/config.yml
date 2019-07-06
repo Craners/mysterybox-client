@@ -7,30 +7,26 @@ jobs:
           name: Build
           command: |
             docker build \
-              -t $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1  \
               -t $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest \
               --cache-from $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest \
               .
             docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
-            docker push $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
             docker push $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
   deploy:
-    # docker:
-    #   - image: circleci/node:8.10
     machine: true
     steps:
       - checkout
+      - run:
+          name: Remove container
+          command: |
+            ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
+            sudo docker kill client && docker rm client
+
       - run:
           name: Pulling new container
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
             sudo docker pull $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
-
-      - run:
-          name: Display images
-          command: |
-            ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
-            sudo docker images
 
       - run:
           name: Run the container
