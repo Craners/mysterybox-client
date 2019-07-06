@@ -22,6 +22,7 @@ jobs:
       - run:
           name: Pulling new container
           command: |
+            sudo systemctl start docker
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
               docker pull $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
               sudo docker run --name=client -d -i -t -p 4000:80 $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
