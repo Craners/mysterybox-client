@@ -16,11 +16,11 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run:
-          name: Remove container
-          command: |
-            ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
-            sudo docker kill client && docker rm client
+      # - run:
+      #     name: Remove container
+      #     command: |
+      #       ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
+      #       sudo docker kill client && docker rm client
 
       - run:
           name: Pulling new container
@@ -38,13 +38,13 @@ workflows:
   version: 2
   deploy:
     jobs:
-      # - build:
-      #     filters:
-      #       tags:
-      #         only: /^v\d*\.\d*\.\d*$/
+      - build:
+          filters:
+            tags:
+              only: /^v\d*\.\d*\.\d*$/
       - deploy:
-          # requires:
-          #   - build
+          requires:
+            - build
           filters:
             tags:
               only: /^v\d*\.\d*\.\d*$/
