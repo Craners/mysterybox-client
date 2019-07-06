@@ -3,6 +3,8 @@ jobs:
     machine: true
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build
           command: |
@@ -24,19 +26,19 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
             sudo docker pull $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
-            sudo docker run --name=client -d -i -t -p 4000:80 $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
+            sudo docker run --name client -d -i -t -p 4000:80 $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
 
 workflows:
   version: 2
   deploy:
     jobs:
-      # - build:
-      #     filters:
-      #       tags:
-      #         only: /^v\d*\.\d*\.\d*$/
+      - build:
+          filters:
+            tags:
+              only: /^v\d*\.\d*\.\d*$/
       - deploy:
-          # requires:
-          #   - build
+          requires:
+            - build
           filters:
             tags:
               only: /^v\d*\.\d*\.\d*$/
