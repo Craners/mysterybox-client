@@ -1,7 +1,7 @@
 jobs:
   build:
     docker:
-      - craners/mysterybox-client:latest
+      - image: craners/mysterybox-client:latest
     steps:
       - checkout
       - setup_remote_docker
