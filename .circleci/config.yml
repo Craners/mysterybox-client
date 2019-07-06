@@ -25,6 +25,10 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
             sudo docker pull $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
+            
+      - run:
+          name: Run the cotainer
+          command: |
             sudo docker run --name client -d -i -t -p 4000:80 $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
 
 workflows:
