@@ -3,8 +3,6 @@ jobs:
     machine: true
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Build
           command: |
@@ -21,6 +19,7 @@ jobs:
       - image: circleci/node:8.10 
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Pulling new container
           command: |
