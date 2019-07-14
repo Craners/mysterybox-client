@@ -20,7 +20,7 @@ jobs:
           name: Remove container
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
-            sudo docker ps -q --filter "name=client" | grep -q . && (docker stop client && docker rm client) || echo container 'client' not Found
+            sudo docker ps -q --filter "name=client" | grep -q . && (sudo docker stop client && sudo docker rm client) || echo container 'client' not Found
       - run:
           name: Pulling new container
           command: |
