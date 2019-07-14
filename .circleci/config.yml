@@ -17,10 +17,17 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Stop container
+          command: |
+            ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
+            sudo docker stop client || true
+
+      - run:
           name: Remove container
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
-            (sudo docker stop client || true) && (sudo docker rm client || true)
+            sudo docker rm client || true
+            
       - run:
           name: Pulling new container
           command: |
