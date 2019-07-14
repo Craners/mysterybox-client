@@ -16,22 +16,16 @@ jobs:
     machine: true
     steps:
       - checkout
-      # - run:
-      #     name: Remove container
-      #     command: |
-      #       ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
-      #       sudo docker kill client && docker rm client
-
+      - run:
+          name: Remove container
+          command: |
+            ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
+            sudo docker ps -q --filter "name=client" | grep -q . && (docker stop client && docker rm client) || echo Container 'client' not Found
       - run:
           name: Pulling new container
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
             sudo docker pull $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
-
-      - run:
-          name: echo port
-          command: |
-            echo $PORT
 
       - run:
           name: Run the container
