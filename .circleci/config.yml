@@ -27,7 +27,7 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
             sudo docker rm client || true
-            
+
       - run:
           name: Pulling new container
           command: |
@@ -40,18 +40,17 @@ jobs:
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
             sudo docker run -e REACT_APP_API_URL=$REACT_APP_API_URL -e REACT_APP_SHOP=$REACT_APP_SHOP -e PORT=$PORT --name client -d -i -t -p 80:$PORT $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
 
-
 workflows:
   version: 2
   deploy:
     jobs:
-      # - build:
-      #     filters:
-      #       tags:
-      #         only: /^v\d*\.\d*\.\d*$/
+      - build:
+          filters:
+            tags:
+              only: /^v\d*\.\d*\.\d*$/
       - deploy:
-          # requires:
-          #   - build
+          requires:
+            - build
           filters:
             tags:
               only: /^v\d*\.\d*\.\d*$/
