@@ -29,14 +29,19 @@ jobs:
             sudo docker pull $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
 
       - run:
+          name: echo port
+          command: |
+            echo $PORT
+
+      - run:
           name: Run the container
           command: |
             ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP \
-            sudo docker run -e REACT_APP_API_URL="$REACT_APP_API_URL" -e REACT_APP_SHOP="$REACT_APP_SHOP" -e PORT="$PORT" --name client -d -i -t -p $PORT:80 $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
-          environment:
-            REACT_APP_API_URL: $REACT_APP_API_URL
-            REACT_APP_SHOP: $REACT_APP_SHOP
-            PORT: $PORT
+            sudo docker run -e REACT_APP_API_URL=$REACT_APP_API_URL -e REACT_APP_SHOP=$REACT_APP_SHOP -e PORT=$PORT --name client -d -i -t -p $PORT:80 $DOCKER_REGISTRY/$CIRCLE_PROJECT_REPONAME:latest
+          # environment:
+          #   REACT_APP_API_URL: $REACT_APP_API_URL
+          #   REACT_APP_SHOP: $REACT_APP_SHOP
+          #   PORT: $PORT
 
 
 workflows:
