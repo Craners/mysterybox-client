@@ -8,6 +8,8 @@ let _ = require('lodash')
 
 class App extends Component {
   constructor(props) {
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
     super(props)
     this.state = {
       first: '',
@@ -16,6 +18,7 @@ class App extends Component {
       checkboxes: [],
       connected: false,
       products: [],
+      shop: params.get("shop")
     }
   }
 
@@ -54,12 +57,12 @@ class App extends Component {
           <Layout.Section>
             <Card title="Mystery Box dashboard" sectioned>
               <p>Create your mystery box here.</p>
-              <ResourceListItem OnProductsAdded={this.handleProductsAddded} />
+              <ResourceListItem OnProductsAdded={this.handleProductsAddded} shop={this.state.shop} />
             </Card>
           </Layout.Section>
           <Layout.Section>
             <Card sectioned>
-              <Selected OnProductsAdded={this.state.products} />
+              <Selected OnProductsAdded={this.state.products} shop={this.state.shop} />
             </Card>
           </Layout.Section>
           <Layout.Section>

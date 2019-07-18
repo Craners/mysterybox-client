@@ -63,7 +63,7 @@ export default class ResourceListItem extends Component {
   //TODO: Move this to App.js. Then pass the data to components as needed.
   async componentDidMount() {
     let api_url = process.env.REACT_APP_API_URL || 'http://localhost:3000'
-    this.shop = process.env.REACT_APP_SHOP
+    this.shop = this.props.shop;
 
     await this.getProducts(api_url, this.shop)
     const shopInfo = await this.getShopInfo(api_url, this.shop)

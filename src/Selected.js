@@ -35,7 +35,7 @@ export default class Selected extends Component {
 
   async componentDidMount() {
     this.setState({ api_url: process.env.REACT_APP_API_URL });
-    this.shop = process.env.REACT_APP_SHOP
+    this.shop = this.props.shop;
 
     const shopInfo = await this.getShopInfo(this.state.api_url, this.shop)
     this.setState({ shopInfo: shopInfo })
