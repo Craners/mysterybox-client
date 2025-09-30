@@ -7,7 +7,7 @@
     "currency-symbol-map": "^4.0.4",
     "dotenv": "^7.0.0",
     "got": "^9.6.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "2.1.8"
